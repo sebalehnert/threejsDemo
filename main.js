@@ -20,9 +20,9 @@ function init() {
 
 	camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
 
-	const defaultLight = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
-	defaultLight.position.set(0.5, 1, 0.25);
-	scene.add(defaultLight);
+	// const defaultLight = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+	// defaultLight.position.set(0.5, 1, 0.25);
+	// scene.add(defaultLight);
 
 	//
 
@@ -82,35 +82,46 @@ function init() {
 	//
 
 	// In order for lighting estimation to work, 'light-estimation' must be included as either an optional or required feature.
-	document.body.appendChild(ARButton.createButton(renderer, { optionalFeatures: ['light-estimation'] }));
+	document.body.appendChild(ARButton.createButton(renderer));
 
 	//------------------
-	var materials = [
-		new THREE.MeshLambertMaterial({
-			map: new THREE.TextureLoader().load('data/DSC_2222-cropped.jpg')
-		}),
-		new THREE.MeshLambertMaterial({
-			map: new THREE.TextureLoader().load('data/DSC_2222-cropped.jpg')
-		}),
-		new THREE.MeshLambertMaterial({
-			map: new THREE.TextureLoader().load('data/DSC_2222-cropped.jpg')
-		}),
-		new THREE.MeshLambertMaterial({
-			map: new THREE.TextureLoader().load('data/DSC_2222-cropped.jpg')
-		}),
-		new THREE.MeshLambertMaterial({
-			map: new THREE.TextureLoader().load('data/DSC_2222-cropped.jpg')
-		}),
-		new THREE.MeshLambertMaterial({
-			map: new THREE.TextureLoader().load('data/DSC_2222-cropped.jpg')
-		})
-	];
+	// var materials = [
+	// 	new THREE.MeshLambertMaterial({
+	// 		map: new THREE.TextureLoader().load('data/DSC_2222-cropped.jpg')
+	// 	}),
+	// 	new THREE.MeshLambertMaterial({
+	// 		map: new THREE.TextureLoader().load('data/DSC_2222-cropped.jpg')
+	// 	}),
+	// 	new THREE.MeshLambertMaterial({
+	// 		map: new THREE.TextureLoader().load('data/DSC_2222-cropped.jpg')
+	// 	}),
+	// 	new THREE.MeshLambertMaterial({
+	// 		map: new THREE.TextureLoader().load('data/DSC_2222-cropped.jpg')
+	// 	}),
+	// 	new THREE.MeshLambertMaterial({
+	// 		map: new THREE.TextureLoader().load('data/DSC_2222-cropped.jpg')
+	// 	}),
+	// 	new THREE.MeshLambertMaterial({
+	// 		map: new THREE.TextureLoader().load('data/DSC_2222-cropped.jpg')
+	// 	})
+	// ];
+
+	//const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( 'data/DSC_2222-cropped.jpg') } );
+	const material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('data/crate.gif') });
+
 	const rotatingBox = new THREE.Mesh(
-		new THREE.BoxGeometry(0.8, 0.8, 0.8, 1, 1, 1, materials));
+		new THREE.BoxGeometry(0.8, 0.8, 0.8, 1, 1, 1, material));
+
+	const texture = new THREE.TextureLoader().load('data/crate.gif');
+	const geometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
+	const material2 = new THREE.MeshBasicMaterial({ map: texture });
+	var mesh = new THREE.Mesh(geometry, material2);
+	// scene.add(mesh);
 
 	boxGroup = new THREE.Group();
 	boxGroup.position.z = - 2;
-	boxGroup.add(rotatingBox);
+	// boxGroup.add(rotatingBox);
+	boxGroup.add(mesh);
 	scene.add(boxGroup);
 
 	//------------------
