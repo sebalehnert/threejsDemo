@@ -106,60 +106,40 @@ function init() {
 	// 	})
 	// ];
 
-	//const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( 'data/DSC_2222-cropped.jpg') } );
-	//const texture1 = new THREE.TextureLoader().load('data/crate.gif');
+	const materials = [
+			new THREE.MeshBasicMaterial({
+				map: new THREE.TextureLoader().load('data/1.jpg')
+			}),
+			new THREE.MeshBasicMaterial({
+				map: new THREE.TextureLoader().load('data/2.jpg')
+			}),
+			new THREE.MeshBasicMaterial({
+				map: new THREE.TextureLoader().load('data/3.jpg')
+			}),
+			new THREE.MeshBasicMaterial({
+				map: new THREE.TextureLoader().load('data/4.jpg')
+			}),
+			new THREE.MeshBasicMaterial({
+				map: new THREE.TextureLoader().load('data/5.jpg')
+			}),
+			new THREE.MeshBasicMaterial({
+				map: new THREE.TextureLoader().load('data/6.jpg')
+			})
+	];
+
 	const material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'data/DSC_2222-cropped.jpg') });
 	const rotatingBox = new THREE.Mesh(
-		new THREE.BoxGeometry(0.8, 0.8, 0.8), material);
-	rotatingBox.position.y += 0.8;
-
-	// const texture = new THREE.TextureLoader().load('data/crate.gif');
-	const texture = new THREE.TextureLoader().load('data/DSC_2222-cropped.jpg');
-	const geometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
-	const material2 = new THREE.MeshBasicMaterial({ map: texture });
-	var mesh = new THREE.Mesh(geometry, material2);
-	// scene.add(mesh);
+		new THREE.BoxGeometry(0.8, 0.8, 0.8), materials);
 
 	boxGroup = new THREE.Group();
 	boxGroup.position.z = - 2;
 	boxGroup.add(rotatingBox);
-	boxGroup.add(mesh);
 	scene.add(boxGroup);
-
-	//------------------
-
-	// const ballGeometry = new THREE.SphereBufferGeometry(0.175, 32, 32);
-	// const ballGroup = new THREE.Group();
-	// ballGroup.position.z = - 2;
-
-	// const rows = 3;
-	// const cols = 3;
-
-	// for (let i = 0; i < rows; i++) {
-
-	// 	for (let j = 0; j < cols; j++) {
-
-	// 		const ballMaterial = new THREE.MeshStandardMaterial({
-	// 			color: 0xdddddd,
-	// 			roughness: i / rows,
-	// 			metalness: j / cols
-	// 		});
-	// 		const ballMesh = new THREE.Mesh(ballGeometry, ballMaterial);
-	// 		ballMesh.position.set((i + 0.5 - rows * 0.5) * 0.4, (j + 0.5 - cols * 0.5) * 0.4, 0);
-	// 		ballGroup.add(ballMesh);
-
-	// 	}
-
-	// }
-
-	// scene.add(ballGroup);
-
-	//
 
 	function onSelect() {
 
-		ballGroup.position.set(0, 0, - 2).applyMatrix4(controller.matrixWorld);
-		ballGroup.quaternion.setFromRotationMatrix(controller.matrixWorld);
+	// 	ballGroup.position.set(0, 0, - 2).applyMatrix4(controller.matrixWorld);
+	// 	ballGroup.quaternion.setFromRotationMatrix(controller.matrixWorld);
 
 	}
 
@@ -191,8 +171,8 @@ function animate() {
 
 function render() {
 
-	boxGroup.rotation.x += 0.01;
-	boxGroup.rotation.y += 0.015;
+	// boxGroup.rotation.x += 0.01;
+	boxGroup.rotation.y -= 0.015 / 4;
 	renderer.render(scene, camera);
 
 }
