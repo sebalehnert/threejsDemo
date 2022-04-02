@@ -107,12 +107,14 @@ function init() {
 	// ];
 
 	//const material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( 'data/DSC_2222-cropped.jpg') } );
-	const material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('data/crate.gif') });
-
+	//const texture1 = new THREE.TextureLoader().load('data/crate.gif');
+	const material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'data/DSC_2222-cropped.jpg') });
 	const rotatingBox = new THREE.Mesh(
-		new THREE.BoxGeometry(0.8, 0.8, 0.8, 1, 1, 1, material));
+		new THREE.BoxGeometry(0.8, 0.8, 0.8), material);
+	rotatingBox.position.y += 0.8;
 
-	const texture = new THREE.TextureLoader().load('data/crate.gif');
+	// const texture = new THREE.TextureLoader().load('data/crate.gif');
+	const texture = new THREE.TextureLoader().load('data/DSC_2222-cropped.jpg');
 	const geometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
 	const material2 = new THREE.MeshBasicMaterial({ map: texture });
 	var mesh = new THREE.Mesh(geometry, material2);
@@ -120,7 +122,7 @@ function init() {
 
 	boxGroup = new THREE.Group();
 	boxGroup.position.z = - 2;
-	// boxGroup.add(rotatingBox);
+	boxGroup.add(rotatingBox);
 	boxGroup.add(mesh);
 	scene.add(boxGroup);
 
@@ -189,8 +191,8 @@ function animate() {
 
 function render() {
 
-	boxGroup.rotation.x += 0.05;
-	boxGroup.rotation.y += 0.07;
+	boxGroup.rotation.x += 0.01;
+	boxGroup.rotation.y += 0.015;
 	renderer.render(scene, camera);
 
 }
