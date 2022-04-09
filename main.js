@@ -30,19 +30,39 @@ function init() {
 	scene.add(allGroup);
 
 	loadFont();
-	createText();
+	// createText();
 
 	camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
 
 	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(window.innerWidth, window.innerHeight);
-	renderer.xr.enabled = true;
+	// renderer.xr.enabled = true;
 	container.appendChild(renderer.domElement);
-	controls = new OrbitControls( camera, renderer.domElement );
-	controls.update();
+	controls = new OrbitControls( camera, container );
+	controls.listenToKeyEvents( window );
+	controls.enabled = true;
+	// controls.update();
 
-	document.body.appendChild(ARButton.createButton(renderer));
+	//-----4
+	controls.addEventListener('mousedown',myOnMouseDownFunction ,false);
+	function myOnMouseDownFunction( evt ) {
+		// evt.preventDefault();
+		// var array = getMousePosition( contB1, evt.clientX, evt.clientY );
+		// onClickPosition.fromArray( array );
+		// var intersects = getIntersects( onClickPosition, sceneB1.children );
+		// if ( intersects.length > 0 && intersects[ 0 ].uv ) {
+		// 	 controls.enabled = false;
+		// 	 var uv = intersects[ 0 ].uv;
+		// 	 console.log(uv);
+		// }else {
+		// 	 controls.enabled = true;
+		// }
+		console.log("I am being called");
+	  }
+	//-----
+
+	// document.body.appendChild(ARButton.createButton(renderer));
 
 	const materials = [
 		new THREE.MeshBasicMaterial({
@@ -93,21 +113,23 @@ function onWindowResize() {
 
 function animate() {
 	renderer.setAnimationLoop(render);
-
 }
 
 function render() {
 	// boxGroup.rotation.x += 0.01;
 	boxGroup.rotation.y -= 0.015 / 4;
+	textGroup.rotation.y -= 0.015 / 2;
+	textGroup.rotation.x -= 0.015 / 10;
 	renderer.render(scene, camera);
 }
 
 function createText() {
+	console.log(font);
 	let textGeo = new TextGeometry(text, {
 		font: font,
 
-		size: 1,
-		height: 0.3
+		size: 2,
+		height: 0.7
 		// curveSegments: curveSegments,
 
 		// bevelThickness: bevelThickness,
@@ -119,8 +141,8 @@ function createText() {
 	// const centerOffset = - 0.5 * (textGeo.boundingBox.max.x - textGeo.boundingBox.min.x);
 
 	let materials = [
-		new THREE.MeshPhongMaterial( { color: 0x222222, flatShading: true } ), // front
-		new THREE.MeshPhongMaterial( { color: 0x222222 } ) // side
+		new THREE.MeshPhongMaterial( { color: 0xff0000, flatShading: true } ), // front
+		new THREE.MeshPhongMaterial( { color: 0x111111 } ) // side
 	];
 
 	let textMesh1 = new THREE.Mesh(textGeo, materials);
@@ -140,5 +162,9 @@ function loadFont() {
 	const loader = new FontLoader();
 	loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (response) {
 		font = response;
+		console.log("loaded");
+		createText();
 	});
+	console.log("myfont");
+	console.log(font);
 }
