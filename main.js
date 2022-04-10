@@ -23,7 +23,7 @@ function init() {
 	scene = new THREE.Scene();
 	allGroup = new THREE.Group();
 	boxGroup = new THREE.Group();
-	// allGroup.add(boxGroup);
+	allGroup.add(boxGroup);
 	textGroup = new THREE.Group();
 	allGroup.add(textGroup);
 	allGroup.position.z = - 2;
@@ -128,8 +128,8 @@ function createText() {
 	let textGeo = new TextGeometry(text, {
 		font: font,
 
-		size: 2,
-		height: 0.7
+		size: 1,
+		height: 0.3
 		// curveSegments: curveSegments,
 
 		// bevelThickness: bevelThickness,
@@ -141,8 +141,8 @@ function createText() {
 	// const centerOffset = - 0.5 * (textGeo.boundingBox.max.x - textGeo.boundingBox.min.x);
 
 	let materials = [
-		new THREE.MeshPhongMaterial( { color: 0xff0000, flatShading: true } ), // front
-		new THREE.MeshPhongMaterial( { color: 0x111111 } ) // side
+		new THREE.MeshBasicMaterial( { color: 0xff0000, flatShading: true } ), // front
+		new THREE.MeshBasicMaterial( { color: 0x444444 } ) // side
 	];
 
 	let textMesh1 = new THREE.Mesh(textGeo, materials);
