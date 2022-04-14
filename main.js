@@ -10,8 +10,11 @@ let controller;
 let allGroup,
 	boxGroup,
 	textGroup;
-let text = "Sebastian",
+let allTextMeshs,
+	text = "Sebastian",
 	font = undefined;
+const numElements = 30;
+let textTransforms = new Map();
 
 init();
 animate();
@@ -24,7 +27,7 @@ function init() {
 	scene = new THREE.Scene();
 	allGroup = new THREE.Group();
 	boxGroup = new THREE.Group();
-	// allGroup.add(boxGroup);
+	allGroup.add(boxGroup);
 	textGroup = new THREE.Group();
 	allGroup.add(textGroup);
 	allGroup.position.z = - 2;
@@ -44,7 +47,7 @@ function init() {
 	controls.enabled = true;
 	// controls.update();
 
-	//-----4
+	//-----
 	controls.addEventListener('mousedown', myOnMouseDownFunction, false);
 	function myOnMouseDownFunction(evt) {
 		// evt.preventDefault();
@@ -116,10 +119,33 @@ function animate() {
 }
 
 function render() {
-	// boxGroup.rotation.x += 0.01;
 	boxGroup.rotation.y -= 0.015 / 4;
-	textGroup.rotation.y -= 0.015 / 2;
-	textGroup.rotation.x -= 0.015 / 10;
+	//textGroup.rotation.y -= 0.015 / 2;
+	//textGroup.rotation.x -= 0.015 / 10;
+
+	if (allTextMeshs) {
+		let newTransforms = new Map();
+		for (let [instance, matrix] of textTransforms.entries()) {
+
+			var translation = new THREE.Vector3();
+			translation.setFromMatrixPosition(matrix);
+
+			translation.y = translation.y - 0.001;
+			if (translation.y < -1.5) {
+				translation.y = 0.0;
+			}
+			let newMatrix = new THREE.Matrix4().makeTranslation(translation.x, translation.y, translation.z);
+			newTransforms.set(instance, newMatrix);
+			allTextMeshs.setMatrixAt(instance, newMatrix);
+
+			if (instance == 0) {
+				console.log(translation);
+			}
+		}
+		textTransforms = newTransforms;
+		allTextMeshs.instanceMatrix.needsUpdate = true;
+	}
+
 	renderer.render(scene, camera);
 }
 
@@ -149,26 +175,15 @@ function createText() {
 		new THREE.MeshBasicMaterial({ color: 0x444444 }) // side
 	];
 
-	//let textMesh1 = new THREE.Mesh(textGeo, materials);
-
-	// textMesh1.position.x = centerOffset;
-	// textMesh1.position.y = hover;
-	// textMesh1.position.z = 0;
-
-	// textMesh1.rotation.x = 0;
-	// textMesh1.rotation.y = Math.PI * 2;
-
-	let allTextMeshs = new THREE.InstancedMesh(textGeo, materials, 1);
+	allTextMeshs = new THREE.InstancedMesh(textGeo, materials, numElements);
 	allTextMeshs.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
-	allTextMeshs.setMatrixAt(0, new THREE.Matrix4());
+	for (let instance = 0; instance < numElements; instance++) {
+		let textMatrix = new THREE.Matrix4().makeTranslation(0.1 * instance, -1.0, 0);
+		textTransforms.set(instance, textMatrix);
+		allTextMeshs.setMatrixAt(instance, textMatrix);
+	}
 
-	let boxGeom = new THREE.BoxGeometry(0.8, 0.8, 0.8);
-	let boxInstanced = new THREE.InstancedMesh(boxGeom, materials, 1);
-	boxInstanced.setMatrixAt(0, new THREE.Matrix4());
-
-	//textGroup.add(boxInstanced);
 	textGroup.add(allTextMeshs);
-	//textGroup.add(textMesh1);
 }
 
 function loadFont() {
