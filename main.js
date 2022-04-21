@@ -43,7 +43,7 @@ function init() {
 	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(window.innerWidth, window.innerHeight);
-	// renderer.xr.enabled = true;
+	renderer.xr.enabled = true;
 	container.appendChild(renderer.domElement);
 	controls = new OrbitControls(camera, container);
 	controls.listenToKeyEvents(window);
@@ -68,7 +68,7 @@ function init() {
 	}
 	//-----
 
-	// document.body.appendChild(ARButton.createButton(renderer));
+	document.body.appendChild(ARButton.createButton(renderer));
 
 	const materials = [
 		new THREE.MeshBasicMaterial({
