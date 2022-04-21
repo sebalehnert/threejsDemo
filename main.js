@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import * as quicknoise from 'quick-perlin-noise-js'
+
 import { ARButton } from 'three/examples/jsm/webxr/ARButton.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
@@ -130,16 +132,19 @@ function render() {
 			var translation = new THREE.Vector3();
 			translation.setFromMatrixPosition(matrix);
 
-			translation.y = translation.y - 0.001;
+			translation.y = translation.y - (Math.random() * 0.002);
 			if (translation.y < -1.5) {
 				translation.y = 0.0;
 			}
+			translation.x = translation.x + (0.01 * quicknoise.noise(instance, translation.y, 0));
+
 			let newMatrix = new THREE.Matrix4().makeTranslation(translation.x, translation.y, translation.z);
 			newTransforms.set(instance, newMatrix);
 			allTextMeshs.setMatrixAt(instance, newMatrix);
 
 			if (instance == 0) {
-				console.log(translation);
+				// console.log(translation);
+				console.log( 0.001 * quicknoise.noise(0, translation.y, 0));
 			}
 		}
 		textTransforms = newTransforms;

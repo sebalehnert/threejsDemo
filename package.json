@@ -4,6 +4,7 @@
   "description": "",
   "private": true,
   "dependencies": {
+    "quick-perlin-noise-js": "^1.0.3",
     "three": "^0.139.0"
   },
   "devDependencies": {
