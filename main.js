@@ -16,6 +16,7 @@ let allTextMeshs,
 	text = "Sebastian",
 	font = undefined;
 const numElements = 30;
+const lowerBound = -1.5;
 let textTransforms = new Map();
 
 init();
@@ -133,8 +134,9 @@ function render() {
 			translation.setFromMatrixPosition(matrix);
 
 			translation.y = translation.y - (Math.random() * 0.002);
-			if (translation.y < -1.5) {
+			if (translation.y < lowerBound) {
 				translation.y = 0.0;
+				translation.x = 0.0;
 			}
 			translation.x = translation.x + (0.01 * quicknoise.noise(instance, translation.y, 0));
 
@@ -183,7 +185,9 @@ function createText() {
 	allTextMeshs = new THREE.InstancedMesh(textGeo, materials, numElements);
 	allTextMeshs.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
 	for (let instance = 0; instance < numElements; instance++) {
-		let textMatrix = new THREE.Matrix4().makeTranslation(0.1 * instance, -1.0, 0);
+		let startY = lowerBound * Math.random();
+
+		let textMatrix = new THREE.Matrix4().makeTranslation(0, startY, 0);
 		textTransforms.set(instance, textMatrix);
 		allTextMeshs.setMatrixAt(instance, textMatrix);
 	}
