@@ -12,10 +12,12 @@ let controller;
 let allGroup,
 	boxGroup,
 	textGroup;
+const allGroupCameraDistance = 2;
 let allTextMeshs,
 	text = "Sebastian",
 	font = undefined;
 const numElements = 30;
+const boxSize = 0.8;
 const lowerBound = -1.5;
 let textTransforms = new Map();
 
@@ -33,7 +35,7 @@ function init() {
 	allGroup.add(boxGroup);
 	textGroup = new THREE.Group();
 	allGroup.add(textGroup);
-	allGroup.position.z = - 2;
+	allGroup.position.z = - allGroupCameraDistance;
 	scene.add(allGroup);
 
 	loadFont();
@@ -92,18 +94,18 @@ function init() {
 	];
 
 	const rotatingBox = new THREE.Mesh(
-		new THREE.BoxGeometry(0.8, 0.8, 0.8), materials);
+		new THREE.BoxGeometry(boxSize, boxSize, boxSize), materials);
 
 	boxGroup.add(rotatingBox);
 
 	function onSelect() {
-		// 	all.position.set(0, 0, - 2).applyMatrix4(controller.matrixWorld);
-		// 	allGroup.quaternion.setFromRotationMatrix(controller.matrixWorld);
+		allGroup.position.set(0, 0, - allGroupCameraDistance).applyMatrix4(controller.matrixWorld);
+		// allGroup.quaternion.setFromRotationMatrix(controller.matrixWorld);
 	}
 
-	// controller = renderer.xr.getController(0);
-	// controller.addEventListener('select', onSelect);
-	// scene.add(controller);
+	controller = renderer.xr.getController(0);
+	controller.addEventListener('select', onSelect);
+	scene.add(controller);
 
 	window.addEventListener('resize', onWindowResize);
 }
@@ -135,7 +137,7 @@ function render() {
 
 			translation.y = translation.y - (Math.random() * 0.002);
 			if (translation.y < lowerBound) {
-				translation.y = 0.0;
+				translation.y = -boxSize/2;
 				translation.x = 0.0;
 			}
 			translation.x = translation.x + (0.01 * quicknoise.noise(instance, translation.y, 0));
@@ -143,11 +145,6 @@ function render() {
 			let newMatrix = new THREE.Matrix4().makeTranslation(translation.x, translation.y, translation.z);
 			newTransforms.set(instance, newMatrix);
 			allTextMeshs.setMatrixAt(instance, newMatrix);
-
-			if (instance == 0) {
-				// console.log(translation);
-				console.log( 0.001 * quicknoise.noise(0, translation.y, 0));
-			}
 		}
 		textTransforms = newTransforms;
 		allTextMeshs.instanceMatrix.needsUpdate = true;
@@ -185,7 +182,7 @@ function createText() {
 	allTextMeshs = new THREE.InstancedMesh(textGeo, materials, numElements);
 	allTextMeshs.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
 	for (let instance = 0; instance < numElements; instance++) {
-		let startY = lowerBound * Math.random();
+		let startY = (lowerBound + boxSize/2) * Math.random() - boxSize/2;
 
 		let textMatrix = new THREE.Matrix4().makeTranslation(0, startY, 0);
 		textTransforms.set(instance, textMatrix);
